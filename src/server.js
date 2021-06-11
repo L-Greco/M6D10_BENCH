@@ -1,18 +1,24 @@
 import express from "express";
 import db from "./utils/db/index.js"
-import blogsRouter from "./blogPosts/index.js";
 import authorsRouter from "./authors/index.js";
+import productsRouter from "./products/index.js";
 import categoriesRouter from "./category/index.js";
 import commentsRouter from "./comments/index.js"
+import cors from "cors"
 
 const { PORT } = process.env
 
 const server = express()
 
-server.use(express.json())
 
-server.use("/blogs", blogsRouter)
+
+
+
+server.use(express.json())
+server.use(cors())
+
 server.use("/authors", authorsRouter)
+server.use("/products", productsRouter)
 server.use("/comments", commentsRouter)
 server.use("/categories", categoriesRouter)
 

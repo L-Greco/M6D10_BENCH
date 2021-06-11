@@ -2,31 +2,31 @@ import { Router } from "express";
 
 import Model from "../utils/db/index.js";
 
-const blogs = Model.Blogs
+const products = Model.Products
 const comments = Model.Comments
-const blogsRouter = Router()
+const productsRouter = Router()
 
 
 
-blogsRouter.get("/", async (req, res, next) => {
+productsRouter.get("/", async (req, res, next) => {
     try {
-        const dbRes = await blogs.findAll()
+        const dbRes = await products.findAll()
         res.send(dbRes)
     } catch (error) {
         res.status(500).send({ error: error.message })
     }
 })
-blogsRouter.get("/all", async (req, res, next) => {
+productsRouter.get("/all", async (req, res, next) => {
     try {
-        const dbRes = await blogs.findAll({
-            attributes: { exclude: ["createdAt", "updatedAt", "authorId", "categoryId"] },
+        const dbRes = await products.findAll({
+            attributes: { exclude: ["createdAt", "updatedAt", "categoryId"] },
             // here in attributes we exclude theese values        
-            include: [{ model: Model.Authors, attributes: { exclude: ["createdAt", "updatedAt"] } }, Model.Comments, Model.Categories],
+            include: [Model.Comments, Model.Categories],
             //  here i populate the comments 
             // and the Authors
             // this is why its an array , otherwise i would just type
             // include Model.Authors
-
+            // { model: Model.Authors, attributes: { exclude: ["createdAt", "updatedAt"] } }
         }
 
 
@@ -37,20 +37,20 @@ blogsRouter.get("/all", async (req, res, next) => {
     }
 })
 
-blogsRouter.get("/:id", async (req, res, next) => {
+productsRouter.get("/:id", async (req, res, next) => {
     try {
-        const dbResponse = await blogs.findByPk(req.params.id);
+        const dbResponse = await products.findByPk(req.params.id);
         res.send(dbResponse);
     } catch (error) {
         res.status(500).send({ error: error.message })
     }
 })
 
-blogsRouter.get("/:id/comments", async (req, res, next) => {
+productsRouter.get("/:id/comments", async (req, res, next) => {
     try {
         const data = await comments.findAll({
             where: {
-                blogId: req.params.id
+                productId: req.params.id
             },
             include: Model.Authors
         });
@@ -60,31 +60,31 @@ blogsRouter.get("/:id/comments", async (req, res, next) => {
     }
 })
 
-blogsRouter.put("/:id", async (req, res, next) => {
+productsRouter.put("/:id", async (req, res, next) => {
     try {
-        await blogs.update(req.body, {
+        await products.update(req.body, {
             where: {
                 id: req.params.id
             }
         });
-        res.status(200).send(`Blog with id : ${req.params.id} is successfully updated!`);
+        res.status(200).send(`Product with id : ${req.params.id} is successfully updated!`);
     } catch (error) {
         res.status(500).send({ error: error.message })
     }
 })
 
-blogsRouter.post("/", async (req, res, next) => {
+productsRouter.post("/", async (req, res, next) => {
     try {
-        const dbResponse = await blogs.create(req.body);
+        const dbResponse = await products.create(req.body);
         res.status(201).send(dbResponse);
     } catch (error) {
         res.status(500).send({ error: error.message })
     }
 })
 
-blogsRouter.delete("/:id", async (req, res, next) => {
+productsRouter.delete("/:id", async (req, res, next) => {
     try {
-        await blogs.destroy({
+        await products.destroy({
             where: {
                 id: req.params.id
             }
@@ -95,4 +95,4 @@ blogsRouter.delete("/:id", async (req, res, next) => {
     }
 })
 
-export default blogsRouter
+export default productsRouter

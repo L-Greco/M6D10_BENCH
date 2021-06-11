@@ -2,8 +2,8 @@ import s from "sequelize"
 import pg from "pg"
 const Sequelize = s.Sequelize;
 const DataTypes = s.DataTypes;
-import BlogModel from "../../blogPosts/model.js"
 import AuthorModel from "../../authors/model.js"
+import ProductModel from "../../products/model.js"
 import CategoryModel from "../../category/model.js"
 import CommentModel from "../../comments/model.js"
 
@@ -20,20 +20,20 @@ const sequelize = new Sequelize(PGDATABASE, PGUSER, PGPASSWORD, {
 
 
 const models = {
+    Products: ProductModel(sequelize, DataTypes),
     Authors: AuthorModel(sequelize, DataTypes),
-    Blogs: BlogModel(sequelize, DataTypes),
     Comments: CommentModel(sequelize, DataTypes),
     Categories: CategoryModel(sequelize, DataTypes),
     sequelize: sequelize,
     pool: pool,
 };
 
-models.Authors.hasMany(models.Blogs, { foreignKey: { allowNull: false } });   //many
-models.Blogs.belongsTo(models.Authors); //one
+
+
 
 // one to many association with Comments and Blogs
-models.Categories.hasMany(models.Blogs, { foreignKey: { allowNull: false } });
-models.Blogs.belongsTo(models.Categories);
+models.Categories.hasMany(models.Products, { foreignKey: { allowNull: false } });
+models.Products.belongsTo(models.Categories);
 
 // comments with authors is one ( Author) to many (Comments)
 
@@ -42,9 +42,8 @@ models.Comments.belongsTo(models.Authors); //a comment has one Author
 
 // comments with blogs
 
-models.Blogs.hasMany(models.Comments, { foreignKey: { allowNull: false } });   //many
-models.Comments.belongsTo(models.Blogs); //a comment has one Author
-
+models.Products.hasMany(models.Comments, { foreignKey: { allowNull: false } });   //many
+models.Comments.belongsTo(models.Products); //a comment has one Author
 
 
 

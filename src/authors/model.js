@@ -15,7 +15,7 @@ export default (sequelize, DataTypes) => {
         },
         avatar: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: true
         }
 
 

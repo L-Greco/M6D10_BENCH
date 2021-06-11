@@ -15,14 +15,7 @@ commentsRouter.get("/", async (req, res, next) => {
     }
 })
 
-// commentsRouter.get("/:id", async (req, res, next) => {
-//     try {
-//         const dbResponse = await comments.findByPk(req.params.id);
-//         res.send(dbResponse);
-//     } catch (error) {
-//         res.status(500).send({ error: error.message })
-//     }
-// })
+
 
 
 commentsRouter.put("/:id", async (req, res, next) => {
